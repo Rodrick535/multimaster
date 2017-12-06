@@ -42,7 +42,7 @@ function check() {
     document.getElementById("indic").innerHTML = "<c style='color: green'>Correct!</c>"
   }
   else {
-    document.getElementById("indic").innerHTML = "<c style='color: red'>Incorrect!</c>"
+    document.getElementById("indic").innerHTML = "<c style='color: red'>Incorrect! The answer is actually " + ans + ".</c>"
     var str = document.getElementById("math").innerHTML
     incorrect = incorrect + "<p>" + str.charAt(0) + "x" + str.charAt(2) + " = " + document.getElementById("input").value + "</p>"
     newProb()
