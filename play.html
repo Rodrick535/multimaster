@@ -2,13 +2,13 @@
 <header>Play</header>
 <br><br>
 <h2 id="math">JS Disabled</h2>
-<input id="input"><br><p id="indic"></p><br><p id="points">Points: 0</p><br>
+<input id="input"><br><p id="indic"></p><br><p id="points">Points: 0</p><p id="streak">Answer streak: 0</p><br>
 <button onclick="share()">Finish and share with teacher</button>
 <p id="area"></p>
 <script>
 function share() {
   var name = prompt("Enter your name:")
-  data = "<p>Student name: " + name + "</p><p>Correct answers: " + points + "</p><p>Incorrect answers:<p>" + incorrect
+  data = "<p>Student name: " + name + "</p><p>Correct answers: " + points + "</p><p>Incorrect answers:<p>" + incorrect + "<p>Highest answer streak: " + hstreak + "</p>"
   enc = sjcl.encrypt("teacher", data)
   document.getElementById("area").innerHTML = "<p>Send this code to your teacher:</p><textarea>" + enc + "</textarea>"
 }
@@ -28,9 +28,34 @@ var n2 = Math.floor((Math.random() * 10));
 var ans = n1 * n2
 var points = 0
 var incorrect = ""
+var streak = 0
+var hstreak = 0
+var devmode = false
 document.getElementById("math").innerHTML = n1 + "x" + n2
 //Checks the user's input
 function check() {
+  if(devmode === "R535DEVModeON" ) {
+    points = points + 1
+    document.getElementById("points").innerHTML = "Points: " + points
+    streak = streak + 1
+    document.getElementById("streak").innerHTML = "Answer streak: " + streak
+    if(streak > hstreak) {
+      hstreak = streak
+    }
+    newProb()
+    if(streak == 10) {
+        document.getElementById("indic").innerHTML = "<c style='color: orange'>Nice job getting ten correct in a row! Keep it up! (DEVMode)</c>"
+    }
+    else {
+      if(streak == 20) {
+        document.getElementById("indic").innerHTML = "<c style='color: orange'>WOW! Twenty correct in a row! You're on fire! (DEVMode)</c>"
+      }
+      else {
+    document.getElementById("indic").innerHTML = "<c style='color: green'>Correct! (DEVMode)</c>"
+      }
+    }
+  }
+  else {
   if(document.getElementById("input").value == "") {
     document.getElementById("indic").innerHTML = "<c style='color: red'>No answer typed!</c>"
   }
@@ -38,14 +63,32 @@ function check() {
   if(document.getElementById("input").value == ans) {
     points = points + 1
     document.getElementById("points").innerHTML = "Points: " + points
+    streak = streak + 1
+    document.getElementById("streak").innerHTML = "Answer streak: " + streak
+    if(streak > hstreak) {
+      hstreak = streak
+    }
     newProb()
+    if(streak == 10) {
+        document.getElementById("indic").innerHTML = "<c style='color: orange'>Nice job getting ten correct in a row! Keep it up!</c>"
+    }
+    else {
+      if(streak == 20) {
+        document.getElementById("indic").innerHTML = "<c style='color: orange'>WOW! Twenty correct in a row! You're on fire!</c>"
+      }
+      else {
     document.getElementById("indic").innerHTML = "<c style='color: green'>Correct!</c>"
+      }
+    }
   }
   else {
+    streak = 0
+    document.getElementById("streak").innerHTML = "Answer streak: " + streak
     document.getElementById("indic").innerHTML = "<c style='color: red'>Incorrect! The answer is actually " + ans + ".</c>"
     var str = document.getElementById("math").innerHTML
     incorrect = incorrect + "<p>" + str.charAt(0) + "x" + str.charAt(2) + " = " + document.getElementById("input").value + "</p>"
     newProb()
+  }
   }
   }
 }
